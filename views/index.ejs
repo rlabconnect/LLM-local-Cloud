@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="./output.css" rel="stylesheet">
+    <title>CU Intership Form Submit</title>
+</head>
+
+<body class="h-screen w-screen bg-[#262629] relative flex items-center justify-center flex-col">
+
+    <!-- for navbar -->
+    <div class="h-20 w-screen bg-black text-white px-10 flex items-center justify-start font-bold text-3xl">
+        CU Internship
+    </div>
+    <!-- form part for document upload -->
+    <div class="flex justify-center items-center flex-1 w-full h-full">
+        <div class="h-auto w-[40%] bg-white rounded-lg p-4 flex flex-col justify-between">
+            <div class="space-y-2">
+                <!-- heading -->
+                <div class="font-bold text-2xl">Upload Internship Form</div>
+                <!-- subheading -->
+                <div>Please upload your internship form as a PDF file.</div>
+            </div>
+
+            <form id="form-submit" action="/upload" class="flex flex-col space-y-5 gap-3" method="post"
+                enctype="multipart/form-data">
+                <!-- choose file input -->
+                <div class="flex flex-col gap-2">
+                    <div class="flex justify-between items-center w-full px-1 mb-1">
+                        <div class="text-gray-600 text-[15px] font-semibold">Internship Form (PDF)</div>
+                        <button type="button" id="previewbutton"
+                            class="text-gray-600 text-[15px] font-semibold hidden">Preview</button>
+                    </div>
+                    <!-- input text for filteration -->
+                    <div class="flex justify-center items-center w-full">
+                        <input type="text" id="inputForFilter" class="w-full outline-none border border-black h-10 rounded-lg p-2" placeholder="Any particular text to extract?(Leave Empty if not)">
+                    </div>
+                    <div class="file-input-container h-10 w-full bg-white border border-gray-400 rounded-lg">
+                        <input type="file" id="file" name="file" class="hidden" />
+                        <label id="box-description" for="file" class="h-full w-full flex items-center justify-center">
+                            Choose File To Upload
+                        </label>
+                    </div>
+                </div>
+
+                <!-- submit button -->
+                <button
+                    class="bg-black flex items-center justify-center gap-2 h-10 rounded-lg text-white hover:bg-[#262629]"
+                    type="submit">Upload form <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24"
+                        height="24" color="#ffffff" fill="none">
+                        <path
+                            d="M12 4.5L12 14.5M12 4.5C11.2998 4.5 9.99153 6.4943 9.5 7M12 4.5C12.7002 4.5 14.0085 6.4943 14.5 7"
+                            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M20 16.5C20 18.982 19.482 19.5 17 19.5H7C4.518 19.5 4 18.982 4 16.5"
+                            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg></button>
+            </form>
+        </div>
+    </div>
+    <!-- for pdf preview -->
+    <div id="preview-popup"
+    class="hidden fixed inset-0 w-full h-full justify-center items-center bg-black bg-opacity-50 z-50">
+    <div class="bg-white p-4 rounded-lg shadow-lg max-h-[90vh] w-auto relative overflow-auto">
+        <h2 class="text-lg font-bold mb-2">PDF Preview</h2>
+        
+        <!-- Canvas Wrapper to restrict height -->
+        <div class="max-h-[70vh] overflow-auto">
+            <canvas id="preview-canvas" class="max-w-full h-auto"></canvas>
+        </div>
+        
+        <!-- Close Button -->
+        <button onclick="closePreview()"
+            class="absolute top-2 right-2 text-white bg-red-500 hover:bg-red-600 px-2 py-1 rounded z-50">
+            <svg xmlns="http://www.w3.org/2000/svg" height="20" width="15" viewBox="0 0 384 512">
+                <path fill="#ffffff"
+                    d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z" />
+            </svg>
+        </button>
+    </div>
+</div>
+
+    <!-- this part is for text preview -->
+     <div class="h-full bg-white w-[90%] hidden relative p-2">
+        <div id="closeResponseText" class="absolute right-2 cursor-pointer h-10 w-10 rounded-full z-10 border border-black flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" class="injected-svg" data-src="https://cdn.hugeicons.com/icons/cancel-01-stroke-standard.svg" xmlns:xlink="http://www.w3.org/1999/xlink" role="img" color="#000000">
+            <path d="M5.00049 4.99988L19.0005 18.9999" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+            <path d="M19.0005 4.99988L5.00049 18.9999" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+        </div>
+        <textarea name="responseText" id="responseText" class="outline-none font-black h-full w-full p-2"></textarea>
+     </div>
+
+     <div id="animationinterface" class="absolute h-full w-full z-50 bg-opacity-50 backdrop-blur-sm bg-black items-center justify-center hidden">
+        <div class="loader">
+            <div class="loader-inner">
+              <div class="loader-block"></div>
+              <div class="loader-block"></div>
+              <div class="loader-block"></div>
+              <div class="loader-block"></div>
+              <div class="loader-block"></div>
+              <div class="loader-block"></div>
+              <div class="loader-block"></div>
+              <div class="loader-block"></div>
+            </div>
+          </div>
+          
+     </div>
+    <script src="./script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+</body>
+
+</html>
